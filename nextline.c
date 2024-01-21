@@ -24,7 +24,7 @@ char *ft_strchr(char *s, char c)
 {
 	while (*s)
 	{
-		if (*s == (char)c)
+		if (*s == c)
 			{return (s);}
 		s++;
 	}
