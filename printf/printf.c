@@ -21,3 +21,7 @@ void put_digit(long long int number, int base, int *len)
 	*len += write(1, &cipher[number], 1);
 }
 
+int ft_printf(const char *format, ... )
+{
+	
+}
