@@ -110,5 +110,4 @@ int main()
 	int i = 0;
 	while(i++ < 9)
 		printf("_output:  %s\n",line = get_next_line(fd));
-
 }
