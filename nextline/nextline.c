@@ -58,7 +58,7 @@ char *ft_strjoin(char *str1, char *str2)
 	ft_strcpy((join + ft_strlen(str1)), str2);
 	free(str1);		// because of: current_line = ft_strjoin(current_line, buf);
 
-		printf("join> %s\n", join);
+		//printf("join> %s\n", join);
 	
 	return(join);
 }
@@ -83,15 +83,15 @@ char * get_next_line(int fd)
 		{printf("___exit: \n"); return(free(current_line), NULL);}
 	if((next_line = ft_strchr(current_line, '\n')))		// when nextline is not empty
 	{
-		printf("next_line: %s\n", next_line);
+		//printf("next_line: %s\n", next_line);
 	
 		current_line_size = next_line - current_line + 1;
 
-		printf("current_line_size: %i\n", current_line_size);
+		//printf("current_line_size: %i\n", current_line_size);
 
 		ft_strcpy(buf, next_line + 1);
 
-		printf("buf: %s\n", buf);
+		//printf("buf: %s\n", buf);
 	}
 	else 
 		ft_strcpy(buf, "");	// if nextline is empty, then buf must be also
@@ -107,7 +107,9 @@ int main()
 	free(line);
 
 	int fd = open("test.txt", O_RDONLY);
-	int i = 0;
-	while(i++ < 9)
-		printf("_output:  %s\n",line = get_next_line(fd));
+
+	do {printf("_output:  %s\n",line = get_next_line(fd));}
+	while(line);  //i++ < 9
+	return(1);
+
 }
