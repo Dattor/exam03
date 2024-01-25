@@ -1,7 +1,7 @@
 #include <unistd.h>
-#include <stdlib.h>	// malloc
+#include <stdlib.h>	// malloc, free
 #include <stdio.h>
-#include <fcntl.h>	//open(), define O_RDONLY
+#include <fcntl.h>	//open, O_RDONLY
 
 
 #ifndef BUFFER_SIZE
@@ -33,8 +33,8 @@ void ft_strcpy(char *dst, char *src)
 
 	while (*src)
 	{
-		*dst = *src;
-		dst++; src++;
+		*dst++ = *src++;
+		//dst++; src++;
 	}
 	*dst = '\0';
 }
@@ -42,7 +42,7 @@ void ft_strcpy(char *dst, char *src)
 char *ft_strdup(char *src)
 {
 	size_t len = ft_strlen(src);
-	char *dst = malloc(len * sizeof(char));
+	char *dst = malloc((len + 1)* sizeof(char) );
 	return(ft_strcpy(dst, src), dst);
 }
 
@@ -52,30 +52,29 @@ char *ft_strjoin(char *str1, char *str2)
 	ft_strcpy(join, str1);
 	ft_strcpy((join + ft_strlen(str1)), str2);
 	free(str1);		// because of: current_line = ft_strjoin(current_line, buf);
-
-		//printf("join> %s\n", join);
 	
 	return(join);
 }
 
 char *get_next_line(int fd)
 {
-	static char	buf[2048][BUFFER_SIZE + 1];
+	static char	buf[2048][BUFFER_SIZE + 1];		//to read multiple fd, 2D array, 2048 is max fd in unix.
 
 	char *current_line = ft_strdup(buf[fd]);		// copy reminder
 	char *next_line;
-	int count_read; //= read(fd, buf, BUFFER_SIZE);
-	int current_line_size;
+	int count_read = 1; //= read(fd, buf, BUFFER_SIZE);
+	int current_line_size = 0;
 
-	while( !(ft_strchr(current_line,'\n')) && (count_read = read(fd, buf[fd], BUFFER_SIZE)) > 0)
+	while( !(ft_strchr(current_line,'\n')) && (count_read /*= read(fd, buf[fd], BUFFER_SIZE)*/) > 0)
 	{
-		buf[fd][count_read] = '\0';
+		count_read = read(fd, buf[fd], BUFFER_SIZE);
+		buf[fd][count_read] = '\0';																//put end of string (because strjoin -> strcpy)
 		current_line = ft_strjoin(current_line, buf[fd]);
-		//count_read = read(fd, buf, BUFFER_SIZE);
-		//write(1, "l\n", 2);
 	}
 	if(ft_strlen(current_line) == 0)
-		{printf("___exit: \n"); return(free(current_line), NULL);}
+		{//printf("___exit: \n");
+		 return(free(current_line), NULL);
+		}
 	if((next_line = ft_strchr(current_line, '\n')))		// when nextline is not empty
 	{
 		//printf("next_line: %s\n", next_line);
@@ -84,7 +83,7 @@ char *get_next_line(int fd)
 
 		//printf("current_line_size: %i\n", current_line_size);
 
-		ft_strcpy(buf[fd], next_line + 1);
+		ft_strcpy(buf[fd], next_line + 1);														// next_line start at \n, so (next + 1) is ok.
 
 		//printf("buf: %s\n", buf);
 	}
@@ -112,7 +111,7 @@ int main()
 	free(line);
 	fd = open("test.txt", O_RDONLY);
 
-	int i = 12;
+	int i = 14;
 	while(i--)
 	{
 		printf("_output1:  %s\n",line = get_next_line(fd));
