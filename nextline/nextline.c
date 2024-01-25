@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include <stdlib.h>
+#include <stdlib.h>	// malloc
 #include <stdio.h>
 #include <fcntl.h>	//open(), define O_RDONLY
 
@@ -14,9 +14,6 @@ size_t ft_strlen(char *s)
 	int i = 0;
 	while(s[i])
 		i++;
-
-	//printf("strlen> %d\n", i);
-	
 	return(i);
 }
 
@@ -30,8 +27,6 @@ char *ft_strchr(char *s, char c)
 	}
 	return (NULL);
 }
-
-
 
 void ft_strcpy(char *dst, char *src)
 {
@@ -63,19 +58,19 @@ char *ft_strjoin(char *str1, char *str2)
 	return(join);
 }
 
-char * get_next_line(int fd)
+char *get_next_line(int fd)
 {
-	static char	buf[BUFFER_SIZE + 1];
+	static char	buf[2048][BUFFER_SIZE + 1];
 
-	char *current_line = ft_strdup(buf);		// copy reminder
+	char *current_line = ft_strdup(buf[fd]);		// copy reminder
 	char *next_line;
 	int count_read; //= read(fd, buf, BUFFER_SIZE);
 	int current_line_size;
 
-	while( !(ft_strchr(current_line,'\n')) && (count_read = read(fd, buf, BUFFER_SIZE)) > 0)
+	while( !(ft_strchr(current_line,'\n')) && (count_read = read(fd, buf[fd], BUFFER_SIZE)) > 0)
 	{
-		buf[count_read] = '\0';
-		current_line = ft_strjoin(current_line, buf);
+		buf[fd][count_read] = '\0';
+		current_line = ft_strjoin(current_line, buf[fd]);
 		//count_read = read(fd, buf, BUFFER_SIZE);
 		//write(1, "l\n", 2);
 	}
@@ -89,27 +84,42 @@ char * get_next_line(int fd)
 
 		//printf("current_line_size: %i\n", current_line_size);
 
-		ft_strcpy(buf, next_line + 1);
+		ft_strcpy(buf[fd], next_line + 1);
 
 		//printf("buf: %s\n", buf);
 	}
 	else 
-		ft_strcpy(buf, "");	// if nextline is empty, then buf must be also
+		ft_strcpy(buf[fd], "");	// if nextline is empty, then buf must be also
 	current_line[current_line_size] = '\0';
 	return(current_line);
 }
 
 int main()
 {
-	write(1, "test std_input\n", ft_strlen("test std_input\n"));
-	char *line = get_next_line(STDIN_FILENO);
-	printf("_output:  %s", line);
-	free(line);
+	//write(1, "test std_input\n", ft_strlen("test std_input\n"));
+	//char *line = get_next_line(STDIN_FILENO);
+	//printf("_output:  %s", line);
+	//free(line);
+
+	char *line;
 
 	int fd = open("test.txt", O_RDONLY);
+	int fd1 = open("test3.txt", O_RDONLY);
 
-	do {printf("_output:  %s\n",line = get_next_line(fd));}
+	do {printf("_output1:  %s\n",line = get_next_line(fd));}
 	while(line);  //i++ < 9
-	return(1);
+
+	free(line);
+	fd = open("test.txt", O_RDONLY);
+
+	int i = 12;
+	while(i--)
+	{
+		printf("_output1:  %s\n",line = get_next_line(fd));
+		free(line);
+		printf("_output2:  %s\n",line = get_next_line(fd1));
+		free(line);
+	}
+		return(1);
 
 }

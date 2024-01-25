@@ -3,4 +3,11 @@ people
 just testing
 multiple file descriptors at once
 hehe
-lets see
+lets 
+NO
+hello
+people
+just testing
+multiple file descriptors at once
+hehe
+lets 
