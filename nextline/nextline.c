@@ -41,8 +41,8 @@ void ft_strcpy(char *dst, char *src)
 
 char *ft_strdup(char *src)
 {
-	size_t len = ft_strlen(src);
-	char *dst = malloc((len + 1)* sizeof(char) );
+	//size_t len = ft_strlen(src);
+	char *dst = malloc((ft_strlen(src) + 1)* sizeof(char) );
 	return(ft_strcpy(dst, src), dst);
 }
 
