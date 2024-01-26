@@ -23,6 +23,32 @@ void put_digit(long number, int base, int *len)
 	*len += write(1, &cipher[number%base], 1);
 }
 
+void	ft_puthex(unsigned int n, int *len)
+{
+	char	s[8];
+	char	*base;
+	int		i;
+
+	base = "0123456789abcdef";
+	i = 0;
+	if (n == 0)
+	{
+		*len += write(1, "0", 1);
+		//ft_putchar('0', len);
+		return ;
+	}
+	while (n != 0)
+	{
+		s[i] = base [n % 16];
+		n = n / 16;
+		i++;
+	}
+	while (i--)
+		*len += write(1, &s[i], 1);
+		//ft_putchar(s[i], len);
+}
+
+
 int ft_printf(const char *string, ... )
 {
 	int ret_len = 0;
@@ -39,7 +65,8 @@ int ft_printf(const char *string, ... )
 			else if (*string == 'd')
 				put_digit(va_arg(args, int), 10, &ret_len);
 			else if(*string == 'x')
-				put_digit(va_arg(args, int),16, &ret_len);
+				ft_puthex(va_arg(args, int), &ret_len);
+				//put_digit(va_arg(args, int),16, &ret_len);
 		}
 		else 
 			ret_len += write(1, string, 1);
@@ -54,6 +81,6 @@ int main()
 	char *s = "vdfgdfgdfgdsvfghqq";
 	int x = 1545311245;
 
-	ft_printf(" number: %d\n string: %s\n hexa: %x\n\n", i, s, x);
-	//printf(" number: %d\n string: %s\n hexa: %x\n", i, s, x);
+	ft_printf(" number: %x\n", -1);
+	printf(" number: %x\n ", -1);
 }
