@@ -88,7 +88,10 @@ char *get_next_line(int fd)
 		//printf("buf: %s\n", buf);
 	}
 	else 
+	{
 		ft_strcpy(buf[fd], "");	// if nextline is empty, then buf must be also
+		current_line_size = ft_strlen(current_line);
+	}
 	current_line[current_line_size] = '\0';
 	return(current_line);
 }
