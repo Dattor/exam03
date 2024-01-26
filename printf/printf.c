@@ -27,7 +27,7 @@ int ft_printf(const char *string, ... )
 {
 	int ret_len = 0;
 	va_list args;
-	va_start (args, string);		//void va_start(va_list ap, last_arg); ap: a_list object that will be initialized by va_start. last_arg: The last named parameter before the ellipsis (...) in the function declaration.
+	va_start (args, string);	//void va_start(va_list ap, last_arg); ap: a_list object that will be initialized by va_start. last_arg: The last named parameter before the ellipsis (...) in the function declaration.
 
 	while (*string)
 	{
