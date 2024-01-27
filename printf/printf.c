@@ -1,6 +1,7 @@
 #include <unistd.h>	// write
 #include <stdarg.h>	// va_list
 #include <stdio.h>	// printf
+#include <limits.h> //INT_MAX, MIN
 
 void put_string(char *str, int *len)
 {
@@ -13,41 +14,17 @@ void put_string(char *str, int *len)
 void put_digit(long number, int base, int *len)
 {
 	char *cipher = "0123456789abcdef";
-	if(number < 0)
+	if(number < 0 && base == 10)
 	{
 		number *= -1;
 		*len += write(1,"-",1);
 	}
+	//if(base == 16)
+		number = (unsigned int)number;
 	if (number >= base)
 		put_digit(number/base, base, len);
 	*len += write(1, &cipher[number%base], 1);
 }
-
-void	ft_puthex(unsigned int n, int *len)
-{
-	char	s[8];
-	char	*base;
-	int		i;
-
-	base = "0123456789abcdef";
-	i = 0;
-	if (n == 0)
-	{
-		*len += write(1, "0", 1);
-		//ft_putchar('0', len);
-		return ;
-	}
-	while (n != 0)
-	{
-		s[i] = base [n % 16];
-		n = n / 16;
-		i++;
-	}
-	while (i--)
-		*len += write(1, &s[i], 1);
-		//ft_putchar(s[i], len);
-}
-
 
 int ft_printf(const char *string, ... )
 {
@@ -65,8 +42,7 @@ int ft_printf(const char *string, ... )
 			else if (*string == 'd')
 				put_digit(va_arg(args, int), 10, &ret_len);
 			else if(*string == 'x')
-				ft_puthex(va_arg(args, int), &ret_len);
-				//put_digit(va_arg(args, int),16, &ret_len);
+				put_digit(va_arg(args, int),16, &ret_len);
 		}
 		else 
 			ret_len += write(1, string, 1);
@@ -77,10 +53,12 @@ int ft_printf(const char *string, ... )
 
 int main()
 {
-	int i = 2125454457;
-	char *s = "vdfgdfgdfgdsvfghqq";
-	int x = 1545311245;
 
-	ft_printf(" number: %x\n", -1);
-	printf(" number: %x\n ", -1);
+	ft_printf(" -1: %x  0: %x  INT_MAX: %x INT_MIN: %x \n", -1, 0, INT_MAX, INT_MIN);
+	printf(" -1: %x  0: %x  INT_MAX: %x INT_MIN: %x \n", -1, 0, INT_MAX, INT_MIN);
+	ft_printf(" -1: %d  0: %d  INT_MAX: %d INT_MIN: %d \n", -1, 0, INT_MAX, INT_MIN);
+	printf(" -1: %d  0: %d  INT_MAX: %d INT_MIN: %d \n", -1, 0, INT_MAX, INT_MIN);
+
+	ft_printf(" -1: %s  0: %s  INT_MAX: %s INT_MIN: %s \n", "-1", "0", "INT_MAX", "INT_MIN");
+	printf(" -1: %s  0: %s  INT_MAX: %s INT_MIN: %s \n", "-1", "0", "INT_MAX", "INT_MIN");
 }
