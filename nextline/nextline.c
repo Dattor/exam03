@@ -59,7 +59,7 @@ char *ft_strjoin(char *str1, char *str2)
 char *get_next_line(int fd)
 {
 	static char	buf[2048][BUFFER_SIZE + 1];		//static! to read multiple fd, 2D array, 2048 is max fd in unix.
-
+	
 	char *current_line = ft_strdup(buf[fd]);		// copy reminder
 	char *next_line;
 	int count_read = 1; //= read(fd, buf, BUFFER_SIZE);
