@@ -61,13 +61,13 @@ char *get_next_line(int fd)
 	static char	buf[2048][BUFFER_SIZE + 1];		//static! to read multiple fd, 2D array, 2048 is max fd in unix.
 	
 	char *current_line = ft_strdup(buf[fd]);		// copy reminder
-	char *next_line;
+	char *next_line = NULL;
 	int count_read = 1; //= read(fd, buf, BUFFER_SIZE);
 	int current_line_size = 0;
 
 	while( !(ft_strchr(current_line,'\n')) && (count_read /*= read(fd, buf[fd], BUFFER_SIZE)*/) > 0)
 	{
-		count_read = read(fd, buf[fd], BUFFER_SIZE);
+		count_read = read(fd, buf[fd], BUFFER_SIZE);	// man 2 read
 		buf[fd][count_read] = '\0';																//put end of string (because strjoin -> strcpy)
 		current_line = ft_strjoin(current_line, buf[fd]);
 	}
