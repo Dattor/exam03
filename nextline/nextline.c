@@ -51,7 +51,7 @@ char *ft_strjoin(char *str1, char *str2)
 	char *join = malloc((ft_strlen(str1) + ft_strlen(str2) + 1) * sizeof(char));
 	ft_strcpy(join, str1);
 	ft_strcpy((join + ft_strlen(str1)), str2);
-	free(str1);		// because of: current_line = ft_strjoin(current_line, buf);
+	free(str1);		// because of: current_line = ft_strdup(buf[fd]); and current_line = ft_strjoin(current_line, buf);
 	
 	return(join);
 }
@@ -67,8 +67,8 @@ char *get_next_line(int fd)
 
 	while( !(ft_strchr(current_line,'\n')) && (count_read /*= read(fd, buf[fd], BUFFER_SIZE)*/) > 0)
 	{
-		count_read = read(fd, buf[fd], BUFFER_SIZE);	// man 2 read
-		buf[fd][count_read] = '\0';																//put end of string (because strjoin -> strcpy)
+		count_read = read(fd, buf[fd], BUFFER_SIZE);	// man 2 read;  ssize_t read(int fd, void *buf, size_t count);
+		buf[fd][count_read] = '\0';						//put end of string (because strjoin -> strcpy)
 		current_line = ft_strjoin(current_line, buf[fd]);
 	}
 	if(ft_strlen(current_line) == 0)
@@ -83,7 +83,7 @@ char *get_next_line(int fd)
 
 		//printf("current_line_size: %i\n", current_line_size);
 
-		ft_strcpy(buf[fd], next_line + 1);														// next_line start at \n, so (next + 1) is ok.
+		ft_strcpy(buf[fd], next_line + 1);			// next_line start at \n, so (next + 1) is ok.
 
 		//printf("buf: %s\n", buf);
 	}
